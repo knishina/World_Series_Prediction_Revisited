@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang = "en-us">
+    <head>
+        <title>World Series: Prediction Model</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" type="text/css" href="./css/style1.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+    <body>
+        <div id="box1"></div>
+        <div class="container col-md-12 background_header1"></div>
+        <div id="box1"></div>
+        
+        <div id="box3"></div>
+        <div id="box3"></div>
+        <div class="container" style="margin-left: 75px; margin-right: 100px;">
+            <h2>Predicting the 2019 World Series Winner</h2>
+        </div>
+
+        <div id="box3"></div>
+        <div class="row" style="margin-left: 100px; margin-right: 100px;">
+            <h5>Revisiting an old problem.</h5>
+        </div>
+        <div class="row">
+            <div class="container" style="margin-left: 100px; margin-right: 100px;">
+                <p class="text3">
+                    Last year, I made an attempt to predict the winner of the 2018 World Series (<a href="https://knishina.github.io/World_Series_Prediction/" target="blank">WS18</a>).  That model was built on only a few features, focusing only on statistically significant data that discerns the World Series winners from all other teams.  These features included: ERA, Runs, and WP (win percentage).  However, that model was a touch simplistic and not terribly accurate.  The goal this year is to build a robust model without narrowing the dataset.
+                </p>
+                <br/>
+                <h5>Controversy.</h5>
+                <p class="text3">
+                    Before diving into the data, however, there is a bit of controversy that must be addressed.  This concerns the definition of the "modern era" of baseball.  There are two years that could be posited as the start of the "modern era": 1905 and 1969.
+                </p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 0px;">
+            <div class="container" style="margin-left: 150px; margin-right: 150px;"> 
+                <p style="margin:0px;"><strong>1905.</strong></p>
+                <p class="text3" style="margin: 0px;"></p>
+                    While the available data reaches back to 1876, it wasn't until 1905 that annual World Series were held.  In 1905, there were significant rule changes.  These included foul balls counted as strikes, RBIs and ERAs were tracked, the mound was moved further back (allowing for breaking balls), and spitballs were made illegal.
+                </p>
+                <p style="margin:0px;"><strong>1969.</strong></p>
+                <p class="text3" style="margin-top: 0px;">
+                    The reason for the 1969 start date is due to significant rule changes that are more similar to current baseball rules.  For example, 1969 marked the first year of division play and the expanded postseason, the strike zone shrinking, and the lowering of the pitcher's mound by five inches.  All of these changes result in very different metrics posted by each team.
+                </p>
+            </div>
+        </div>
+        <br/>
+        <div class="row" style="margin-left: 100px; margin-right: 100px;">
+                <h5>The Big Picture.</h5>
+        </div>
+        <div class="row">
+            <div class="container" style="margin-left: 150px; margin-right: 150px;">
+                <p class="text3">
+                    <strong>Data.</strong><br/>
+                    Two datasets will be obtained.  The first will include data from 1905-2019; the second will include data from 1969-2019.  All statistics from hitting, fielding, and pitching will be included in the dataset, with the exception of calculated features.  
+                </p>
+                <p class="text3">
+                    <strong>Models.</strong><br/>
+                    Each dataset will be put through different readily available models.  These models will be fine-tuned.  The generated models will be validated against data from 2016-2018 to ensure that the predictions are accurate.
+                </p>
+            </div>
+        </div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+        <div id="box1"></div>
+
+        <div class="row col-md-12" style="background-color: rgb(28, 74, 175)">
+            <img id="box4" src="./images/trophy.jpeg">
+            <div class="text2">Who is the next World Series winner?</div>
+            <br/>
+        </div>
+
+        <div id="box3"></div>
+        <div id="box3"></div>
+        <div class="container" style="margin-left: 75px; margin-right: 100px;">
+            <h4>Data.</h4>
+        </div>
+        <div class="row">
+            <div class="container" style="margin-left: 100px; margin-right: 100px;">
+                <p class="text3">
+                    In the earlier rudimentary model, I used data from <a href="https://www.kaggle.com/open-source-sports/baseball-databank/version/1#TeamsHalf.csv" target="blank">Kaggle</a>.  However, that dataset is outdated.  In an effort to get the most recent data, I decided to scrape <a href="http://mlb.mlb.com/stats/" target="blank">MLB</a> and <a href="http://www.espn.com/mlb/worldseries/history/winners" target="blank">ESPN</a>.  All of the data were for teams and not individual contributors.
+                </p>
+                <ul class="text3">
+                    <li>There were four scrapes for the following data: hitting data, pitching data, fielding data, and World Series winners.  Each dataset was saved as a csv.<br/>
+                        <li style="margin-left: 50px; list-style-type: square;">
+                            The World Series winners were obtained from ESPN.<br/>
+                            <img src="./images/ESPN.png" width=80%>
+                        </li>
+                        <br>
+                        <li style="margin-left: 50px; list-style-type: square;">
+                            Hitting, pitching, and fielding data were obtained from MLB.  This involved a scrape using BeautifulSoup.  The data were indicated by td tags.<br/>
+                            <img src="./images/MLB.png" width=80%>
+                        </li>
+                    </li>
+                    <br/>
+                    <li>
+                        Data before 1905 was removed from all datasets.  Additionally, data from 1994 was removed.  Recall that in 1994, there was a strike that resulted in an appended regular season and no World Series.
+                    </li>
+                    <br/>
+                    <li>
+                        Merge the hitting, pitching, and fielding data on team and year.<br/>
+                        <img src="./images/merge.png" width=100%>
+                    </li>
+                    <br/>
+                    <li>
+                        Add a winner column.  1's indicate a winner for World Series; 0's indicate not a winner for World Series.<br/>
+                        <img src="./images/winner.png" width=110%>
+                    </li>
+                    <br/>
+                    <li>
+                        Split the data into two datasets: 1905-2019, and 1969-2019.
+                    </li>
+                    <li>
+                        Remove columns that have aggregate values or have too many missing values.  With these data, the missing data were scraped as "-".
+                    </li>
+                </ul>
+                <p class="text3">
+                    The notebooks for scraping and cleaning data can be found in my <a href="https://github.com/knishina/World_Series_Prediction_Revisited/tree/master/notebooks_for_data">GitHub.</a>
+                </p>
+            </div>
+        </div>
+        <br>
+        <div id="box3"></div>
+        <div id="box1"></div>
+
+        <div class="container col-md-11 col-md-offset-1">
+            <div id="box3"></div>
+            <div id="box3"></div>
+            <h1>Results: Win Percentage</h1>
+            <div id="plotly-div1"></div>
+            <div id="box2"></div>
+            <div id="plotly-div2"></div>
+        </div>
+        <div id="box3"></div>
+        <div class="row">
+            <div class="container col-md-10 col-md-offset-2">
+                <h3>Analysis:</h3>
+                <p class="text3">
+                    These two graphs depict the percentage of games each team won during the regular season from 1905-2015 or from 1969-2015.  In both graphs, World Series winners are in blue, and non-winners are in red.  Both populations are large and have a somewhat normal distribution.  Means of each sample group (winners and non-winners) were calculated and compared.  A Z-Score was calculated, resulting in the determination of P-Values and confidence intervals.
+                </p>
+                <br>
+                <h5>1905-2015 Population</h5>
+                <div class="row">
+                    <div class="container col-md-6">
+                        <ul><strong>World Series Winners</strong>
+                            <li>Mean: 61.40</li>
+                            <li>Standard Deviation: 6.00</li>
+                            <li>Variance: 36.00</li>
+                            <li>Sample Size: 110</li>
+                        </ul>
+                    </div>
+                    <div class="container col-md-6">
+                        <ul><strong>Non-World Series Winning Teams</strong>
+                            <li>Mean: 46.65</li>
+                            <li>Standard Deviation: 14.25</li>
+                            <li>Variance: 203.06</li>
+                            <li>Sample Size: 2204</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text3">
+                    The test hypothesis is that World Series winners tend to have a higher percentage of wins than non-World Series teams.  This is a single-tail test.  The calculated Z-Score is -22.78.  The corresponding P-Value is less than 0.00001.  This means that I choose a confidence level of 99.99% (alpha = 0.0001) that World Series teams have a higher win percentage than all other teams.  Since the P-Value is less than alpha, the test hypothesis is accepted (reject null hypothesis).  There is a statistically significant difference between the World Series winners and non-World Series teams.
+                </p>
+                <br>
+                <h5>1969-2015 Population</h5>
+                <div class="row">
+                    <div class="container col-md-6">
+                        <ul><strong>World Series Winners</strong>
+                            <li>Mean: 59.20</li>
+                            <li>Standard Deviation: 5.29</li>
+                            <li>Variance: 27.98</li>
+                            <li>Sample Size: 46</li>
+                        </ul>
+                    </div>
+                    <div class="container col-md-6">
+                        <ul><strong>Non-World Series Winning Teams</strong>
+                            <li>Mean: 49.05</li>
+                            <li>Standard Deviation: 11.83</li>
+                            <li>Variance: 139.95</li>
+                            <li>Sample Size: 1214</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text3">
+                    Again, the test hypothesis is that World Series winners tend to have a higher percentage of wins than non-World Series teams.  This is a single-tail test.  The calculated Z-Score is -11.93.  The corresponding P-Value is less than 0.00001.  This means that I choose a confidence level of 99.99% (alpha = 0.0001) that World Series teams have a higher win percentage than all other teams.  Since the P-Value is less than alpha, the test hypothesis is accepted (reject null hypothesis).  There is a statistically significant difference between the World Series winners and non-World Series teams.
+                </p>
+                <br>
+                <h3>Conclusion:</h3>
+                <p class="text3" style="color:rgb(192, 57, 43)">
+                    There is a statistically significant difference between World Series winners and non-winners for win percentage.  However, there does not appear to be much a difference betweeen the 1905-2015 and 1969-2015 populations.
+                </p>
+            </div>
+        </div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+
+
+
+        <div id="box1"></div>
+        <div class="container col-md-11 col-md-offset-1">
+                <div id="box3"></div>
+                <div id="box3"></div>
+                <h1>Results: Runs</h1>
+                <div id="plotly-div5"></div>
+                <div id="box2"></div>
+                <div id="plotly-div6"></div>
+            </div>
+            <div id="box3"></div>
+            <div class="row">
+                <div class="container col-md-10 col-md-offset-2">
+                    <h3>Analysis:</h3>
+                    <p class="text3">
+                        These two graphs depict the total runs of each team during the regular season from 1905-2015 or from 1969-2015.  In both graphs, World Series winners are in blue, and non-winners are in red.  Both populations are large and have a somewhat normal distribution.  Means of each sample group (winners and non-winners) were calculated and compared.  A Z-Score was calculated, resulting in the determination of P-Values and confidence intervals.
+                    </p>
+                    <br>
+                    <h5>1905-2015 Population</h5>
+                    <div class="row">
+                        <div class="container col-md-6">
+                            <ul><strong>World Series Winners</strong>
+                                <li>Mean: 767.09</li>
+                                <li>Standard Deviation: 119.98</li>
+                                <li>Variance: 14395.2</li>
+                                <li>Sample Size: 110</li>
+                            </ul>
+                        </div>
+                        <div class="container col-md-6">
+                            <ul><strong>Non-World Series Winning Teams</strong>
+                                <li>Mean: 687.85</li>
+                                <li>Standard Deviation: 154.62</li>
+                                <li>Variance: 23907.34</li>
+                                <li>Sample Size: 2204</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text3">
+                        The test hypothesis is that World Series winners tend to have a higher number of total runs than non-World Series teams.  This is a single-tail test.  The calculated Z-Score is -6.66.  The corresponding P-Value is less than 0.00001.  This means that I choose a confidence level of 99.99% (alpha = 0.0001) that World Series teams have a higher number of total runs than all other teams.  Since the P-Value is less than alpha, the test hypothesis is accepted (reject null hypothesis).  There is a statistically significant difference between the World Series winners and non-World Series teams.
+                    </p>
+                    <br>
+                    <h5>1969-2015 Population</h5>
+                    <div class="row">
+                        <div class="container col-md-6">
+                            <ul><strong>World Series Winners</strong>
+                                <li>Mean: 765.84</li>
+                                <li>Standard Deviation: 97.86</li>
+                                <li>Variance: 9576.58</li>
+                                <li>Sample Size: 46</li>
+                            </ul>
+                        </div>
+                        <div class="container col-md-6">
+                            <ul><strong>Non-World Series Winning Teams</strong>
+                                <li>Mean: 707.0</li>
+                                <li>Standard Deviation: 133.16</li>
+                                <li>Variance: 17731.59</li>
+                                <li>Sample Size: 1214</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text3">
+                        Again, the test hypothesis is that World Series winners tend to have a high number of total runs than non-World Series teams.  This is a single-tail test.  The calculated Z-Score is -3.94.  The corresponding P-Value is less than 0.0001.  This means that I choose a confidence level of 99.9% (alpha = 0.001) that World Series teams have a higher number of runs than all other teams.  Since the P-Value is less than alpha, the test hypothesis is accepted (reject null hypothesis).  There is a statistically significant difference between the World Series winners and non-World Series teams.
+                    </p>
+                    <br>
+                    <h3>Conclusion:</h3>
+                    <p class="text3" style="color:rgb(192, 57, 43)">
+                        There is a statistically significant difference between World Series winners and non-winners for total runs.  However, there does not appear to be much a difference betweeen the 1905-2015 and 1969-2015 populations.
+                    </p>
+                </div>
+            </div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+
+
+
+        <div id="box1"></div>
+        <div class="container col-md-11 col-md-offset-1">
+                <div id="box3"></div>
+                <div id="box3"></div>
+                <h1>Results: ERA</h1>
+                <div id="plotly-div3"></div>
+                <div id="box2"></div>
+                <div id="plotly-div4"></div>
+            </div>
+            <div id="box3"></div>
+            <div class="row">
+                <div class="container col-md-10 col-md-offset-2">
+                    <h3>Analysis:</h3>
+                    <p class="text3">
+                        These two graphs depict the ERA of each team during the regular season from 1905-2015 or from 1969-2015.  In both graphs, World Series winners are in blue, and non-winners are in red.  Both populations are large and have a somewhat normal distribution.  Means of each sample group (winners and non-winners) were calculated and compared.  A Z-Score was calculated, resulting in the determination of P-Values and confidence intervals.
+                    </p>
+                    <br>
+                    <h5>1905-2015 Population</h5>
+                    <div class="row">
+                        <div class="container col-md-6">
+                            <ul><strong>World Series Winners</strong>
+                                <li>Mean: 3.25</li>
+                                <li>Standard Deviation: 0.87</li>
+                                <li>Variance: 0.76</li>
+                                <li>Sample Size: 110</li>
+                            </ul>
+                        </div>
+                        <div class="container col-md-6">
+                            <ul><strong>Non-World Series Winning Teams</strong>
+                                <li>Mean: 4.07</li>
+                                <li>Standard Deviation: 1.38</li>
+                                <li>Variance: 1.90</li>
+                                <li>Sample Size: 2204</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text3">
+                        The test hypothesis is that World Series winners tend to have a lower ERA than non-World Series teams.  This is a single-tail test.  The calculated Z-Score is -9.32.  The corresponding P-Value is less than 0.00001.  This means that I choose a confidence level of 99.99% (alpha = 0.0001) that World Series teams have a ERA lower than all other teams.  Since the P-Value is less than alpha, the test hypothesis is accepted (reject null hypothesis).  There is a statistically significant difference between the World Series winners and non-World Series teams.
+                    </p>
+                    <br>
+                    <h5>1969-2015 Population</h5>
+                    <div class="row">
+                        <div class="container col-md-6">
+                            <ul><strong>World Series Winners</strong>
+                                <li>Mean: 3.76</li>
+                                <li>Standard Deviation: 0.6</li>
+                                <li>Variance: 0.36</li>
+                                <li>Sample Size: 46</li>
+                            </ul>
+                        </div>
+                        <div class="container col-md-6">
+                            <ul><strong>Non-World Series Winning Teams</strong>
+                                <li>Mean: 4.31</li>
+                                <li>Standard Deviation: 1.06</li>
+                                <li>Variance: 1.12</li>
+                                <li>Sample Size: 1214</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text3">
+                        Again, the test hypothesis is that World Series winners tend to have a lower ERA than non-World Series teams.  This is a single-tail test.  The calculated Z-Score is -5.88.  The corresponding P-Value is less than 0.00001.  This means that I choose a confidence level of 99.99% (alpha = 0.0001) that World Series teams have a ERA lower than all other teams.  Since the P-Value is less than alpha, the test hypothesis is accepted (reject null hypothesis).  There is a statistically significant difference between the World Series winners and non-World Series teams.
+                    </p>
+                    <br>
+                    <h3>Conclusion:</h3>
+                    <p class="text3" style="color:rgb(192, 57, 43)">
+                        There is a statistically significant difference between World Series winners and non-winners for ERAs.  However, there does not appear to be much a difference betweeen the 1905-2015 and 1969-2015 populations.
+                    </p>
+                </div>
+            </div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+        
+
+        <div id="box1"></div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+        <div class="row">
+            <div class="container col-md-10 col-md-offset 2">
+                <h1>ML: Predicting the 2018 World Series Winner</h1>
+                <p class="text3">
+                    So far, the data indicate that win percentage, total runs, and ERA are significantly different when considering World Series winners and non-winners.  Additionally, the 1905 start point is not that much different than the 1969 start point when assessing P-values.  Therefore in building the ML model, win percentage, total runs, and ERA from 1905-2015 will be considered.
+                </p>
+                <p class="text3">
+                    There were two models tested.  Initially, with Scikit-learn, the Random Forest model was used to evaluate the data.  The model yielded a 32.7% success rate, a 67.3% failure rate, and a 4.14% false-positive rate.  Due to the low success rate seen with the Random Forest model, a second model was utilized.  Using Logistic Regression, the following was found: 82.7% success rate, 17.3% failure rate, and 19% false positive rate.  The Logistic Regression model, while having a good success rate, had a very high false positive rate.  Given the two models, the Logistic Regression model appears to yield better results.
+                </p>
+                <p class="text3">
+                    The model was trained on data from 1905-2015, and the model was tested on data from 2016 and 2017.  Data from 2016 yielded a successful test run where the prediction matched the actual outcome.  The model predicted the Cubs to win, and the actual outcome was that the Cubs won the World Series.  Interestingly, the total runs made by the Cubs during the regular season was the highest compared to other teams.  
+                </p>
+                <p class="text3">
+                    Data from 2017 did not yeid a successful run.  The model predicted the Indians winning, while the actual outcome was the Astros winning the World Series.  As with the 2016 season, the total runs made by the Astros was the highest compared to other teams.  It may be the case that simply assessing the total runs in the regular season may be the metric to evaluate to determine the World Series winner.
+                </p>
+                <p class="text3" style="color:rgb(192, 57, 43)"><strong>
+                    Given the current standings in the 2018 regular season, the model predicts the Astros to win the World Series.  This agrees with a prediction found on the MLB web site.  However, following the past trend of teams with the highest total runs winning the World Series, the Boston Red Sox might be poised to win it all.
+                </strong></p>
+            </div>
+        </div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+
+        <div id="box1"></div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+        <div class="row">
+            <div class="container col-md-10 col-md-offset 2">
+                <h1>ML: Problems With the Model</h1>
+                <ul><strong>There are a few issues with this predictive model:</strong>
+                    <li>There is a conflict between the model and the total number of runs during the regular season in predicting World Series winners.</li>
+                    <li>The model does not consider "heart", "will to win", or "chemistry" when determining the winner.</li>
+                    <li>The model does not account for freak accidents sustained during the post season.</li>
+                </ul>
+            </div>
+        </div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+
+        <div id="box1"></div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+        <div class="row">
+            <div class="container col-md-10 col-md-offset 2">
+                <h1>References:</h1>
+                <ul>
+                    <li><a href="https://www.kaggle.com/open-source-sports/baseball-databank/version/1#TeamsHalf.csv" target="blank">Data from Kaggle</a></li>
+                    <li><a href="https://www.baseball-reference.com/leagues/MLB/" target="blank">Data from MLB (Pulled 07/26/2018)</a></li>
+                    <li><a href="http://www.espn.com/mlb/columns/story?columnist=stark_jayson&id=2471349" target="blank">Drawing the Line at 1969</a></li>
+                    <li><a href="https://www.history.com/news/what-is-baseballs-modern-era" target="blank">What is baseball's "modern era"?</a></li>
+                    <li><a href="http://www.sportingnews.com/us/mlb/news/world-series-2017-prediction-astros-dodgers-schedule-stats-mlb/1tx4mfdfxgk831mbzuxqhvvgeh" target="blank">World Series 2017: Three reasons the Astros will win</a></li>
+                    <li><a href="https://github.com/knishina/World_Series_Prediction/tree/master/notebooks_for_clean_data" target="blank">Code for Data Scrub</a></li>
+                    <li><a href="https://github.com/knishina/World_Series_Prediction/tree/master/graphs" target="blank">Code for Data Visualization</a></li>
+                    <li><a href="https://github.com/knishina/World_Series_Prediction/tree/master/ML" target="blank">Code for ML Models</a></li>
+                    <li><a href="https://www.mlb.com/news/mlb-division-postseason-predictions-for-2018/c-269639762" target="blank">Experts predict this year's World Series winner</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="box3"></div>
+        <div id="box3"></div>
+        
+        <div id="box1"></div>
+        <div class="container col-md-12 background_header1"></div>
+        <div id="box1"></div>
+
+
+        <script src="./static/js/1905.js"></script>
+        <script src="./static/js/1969.js"></script>
+        <script src="./static/js/1905ERA.js"></script>
+        <script src="./static/js/1969ERA.js"></script>
+        <script src="./static/js/1905Runs.js"></script>
+        <script src="./static/js/1969Runs.js"></script>
+    </body>
+</html>

@@ -1,0 +1,47 @@
+#box1 {
+    height: 25px;
+    background-color: rgb(28, 74, 175);
+}
+
+#box2 {
+    height: 5px;
+    background-color: lightgray;
+}
+
+#box3 {
+    height: 25px;
+    background-color: white;
+}
+
+#box4 {
+    margin-left: 150px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.background_header1 {
+    background-image: url("../images/baseball_header.jpg");
+    opacity: 1;
+    background-repeat: no-repeat;
+    height: 200px;
+    width: auto;
+    align-self: center;
+}
+
+.text2 {
+    -webkit-text-stroke: 1px grey;
+   color: white;
+   text-shadow:
+       3px 3px 0 #000,
+     -1px -1px 0 #000,  
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
+    font-style: oblique;
+    font-size: 30px;
+    margin: auto;
+}
+
+.text3 {
+    text-align: justify;
+}
